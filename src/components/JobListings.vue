@@ -1,6 +1,16 @@
 <script setup>
 import jobData from "@/jobs.json";
 import { ref } from "vue";
+import JobListing from "./JobListing.vue";
+import { RouterLink } from "vue-router";
+
+defineProps({
+  limit: Number,
+  showButton: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 let jobs = ref(jobData);
 console.log(jobs.value);
@@ -13,10 +23,20 @@ console.log(jobs.value);
         Browse Jobs
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-for="job in jobs" :key="job.id" class="bg-red-50 px-4 py-10">
-          {{ job }}
-        </div>
+        <JobListing
+          v-for="job in jobs.slice(0, limit || jobs.length)"
+          :key="job.id"
+          class="bg-red-50 px-4 py-10"
+          :job="job"
+        />
       </div>
     </div>
+  </section>
+  <section v-if="showButton" class="m-auto max-w-lg my-10 px-6">
+    <RouterLink
+      href="/jobs"
+      class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
+      >View All Jobs</RouterLink
+    >
   </section>
 </template>
